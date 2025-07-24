@@ -25,6 +25,10 @@
             <label for="season">Season</label>
             <input type="text" class="form-control" id="season" th:field="*{season}" placeholder="e.g., Summer, Monsoon" required>
         </div>
+        <div class="form-group">
+            <label for="problemDescription">Problem Description</label>
+            <textarea class="form-control" id="problemDescription" th:field="*{problemDescription}" rows="4" placeholder="Describe your farming problem or concerns in detail..."></textarea>
+        </div>
         <button type="submit" class="btn btn-primary">Get Suggestion</button>
         <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
     </form>

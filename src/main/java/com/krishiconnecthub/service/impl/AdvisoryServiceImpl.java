@@ -58,29 +58,38 @@ public class AdvisoryServiceImpl implements AdvisoryService {
         User farmer = userRepository.findById(requestDTO.getFarmerId())
             .orElseThrow(() -> new IllegalArgumentException("Farmer not found with ID: " + requestDTO.getFarmerId()));
 
-        String suggestion = getSuggestionFromGroq(requestDTO.getCropType(), requestDTO.getSoilType(), requestDTO.getSeason());
+        String suggestion = getSuggestionFromGroq(requestDTO.getCropType(), requestDTO.getSoilType(), requestDTO.getSeason(), requestDTO.getProblemDescription());
 
         AdvisoryRequest advisoryRequest = new AdvisoryRequest();
         advisoryRequest.setFarmer(farmer);
         advisoryRequest.setCropType(requestDTO.getCropType());
         advisoryRequest.setSoilType(requestDTO.getSoilType());
         advisoryRequest.setSeason(requestDTO.getSeason());
+        advisoryRequest.setProblemDescription(requestDTO.getProblemDescription());
         advisoryRequest.setSuggestion(suggestion);
 
         return advisoryRequestRepository.save(advisoryRequest);
     }
 
-    private String getSuggestionFromGroq(String crop, String soil, String season) throws IOException {
+    private String getSuggestionFromGroq(String crop, String soil, String season, String problemDescription) throws IOException {
         if (groqApiKey == null || groqApiKey.equals("YOUR_GROQ_API_KEY_IS_NOT_SET") || groqApiKey.trim().isEmpty()) {
             String warningMsg = "Groq API key is not configured. Please set the GROQ_API_KEY environment variable.";
             logger.warn(warningMsg);
             throw new IOException(warningMsg);
         }
 
-        String prompt = String.format(
-            "You are an expert agricultural advisor. Provide practical, step-by-step farming advice for a farmer growing '%s' in '%s' soil during the '%s' season. Focus on actionable tips.",
-            crop, soil, season
-        );
+        String prompt;
+        if (problemDescription != null && !problemDescription.trim().isEmpty()) {
+            prompt = String.format(
+                "You are an expert agricultural advisor. Provide practical, step-by-step farming advice for a farmer growing '%s' in '%s' soil during the '%s' season. The farmer has described their specific problem: '%s'. Focus on actionable tips to address this problem.",
+                crop, soil, season, problemDescription
+            );
+        } else {
+            prompt = String.format(
+                "You are an expert agricultural advisor. Provide practical, step-by-step farming advice for a farmer growing '%s' in '%s' soil during the '%s' season. Focus on actionable tips.",
+                crop, soil, season
+            );
+        }
 
         HttpPost post = new HttpPost(GROQ_API_URL);
         // Groq uses a Bearer token for authorization, which is different from Gemini's API key in the URL.

@@ -17,6 +17,9 @@ public class AdvisoryRequest {
     private String season;
 
     @Lob // For potentially long text
+    private String problemDescription;
+
+    @Lob // For potentially long text
     private String suggestion;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,6 +57,14 @@ public class AdvisoryRequest {
 
     public void setSeason(String season) {
         this.season = season;
+    }
+
+    public String getProblemDescription() {
+        return problemDescription;
+    }
+
+    public void setProblemDescription(String problemDescription) {
+        this.problemDescription = problemDescription;
     }
 
     public String getSuggestion() {
