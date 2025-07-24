@@ -11,7 +11,7 @@ This project is built with Spring Boot, Java, and Thymeleaf, featuring a clean, 
 *   **Dual User Roles**: Separate registration and dashboards for **Farmers** and **Buyers**.
 *   **Product Marketplace**: Farmers can list their products, and buyers can browse and purchase them directly.
 *   **Direct Ordering System**: Buyers can place orders for available products, with stock levels managed automatically.
-*   **AI-Powered Farming Advisory**: Farmers can request farming advice based on crop type, soil type, and season. The backend calls the **Google Gemini API** to generate a practical, actionable suggestion.
+*   **AI-Powered Farming Advisory**: Farmers can request farming advice based on crop type, soil type, season and problem description. 
 *   **In-Memory Database**: Utilizes H2 in-memory database, pre-populated with sample data via `data.sql` for immediate demonstration.
 *   **Session Management**: Secure user sessions to provide a personalized experience.
 
