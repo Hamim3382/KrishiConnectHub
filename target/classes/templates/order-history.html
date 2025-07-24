@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/dashboard}">Krishi Connect Hub</a>
+</nav>
+<div class="container mt-4">
+    <h2>My Order History</h2>
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Order Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.product.name}"></td>
+                <td th:text="${order.quantity}"></td>
+                <td th:text="${'$' + #numbers.formatDecimal(order.product.price * order.quantity, 1, 2)}"></td>
+                <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td><span class="badge badge-warning" th:text="${order.status}"></span></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(orders)}">
+                <td colspan="6" class="text-center">You have not placed any orders yet.</td>
+            </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/marketplace}" class="btn btn-primary">Continue Shopping</a>
+</div>
+</body>
+</html>
